@@ -33,17 +33,36 @@ export interface DashboardProjectListRecord {
   updated_at: string
 }
 
+/** DB record for decision_log table */
+export interface DecisionLogRecord {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  status: string
+  created_at: string
+  updated_at: string
+}
+
 export interface Decision {
   id: string
   projectId: string
   title: string
   description: string
   status: 'draft' | 'pending' | 'approved' | 'changes_requested'
+  phase?: string
+  assigneeId?: string
+  assigneeName?: string
   options: DecisionOption[]
   recommendedOptionId?: string
+  recommendationText?: string
   approvedOptionId?: string
   approvedAt?: string
   approvedBy?: string
+  created_at?: string
+  updated_at?: string
+  comments?: DecisionComment[]
+  versions?: DecisionVersion[]
 }
 
 export interface DecisionOption {
@@ -52,6 +71,27 @@ export interface DecisionOption {
   description?: string
   costDelta?: number
   imageUrl?: string
+  pdfUrl?: string
+  specLink?: string
+}
+
+export interface DecisionComment {
+  id: string
+  decisionId: string
+  authorId: string
+  authorName: string
+  body: string
+  createdAt: string
+}
+
+export interface DecisionVersion {
+  id: string
+  decisionId: string
+  version: number
+  title: string
+  changedAt: string
+  changedBy: string
+  summary?: string
 }
 
 export interface TimelinePhase {

@@ -52,6 +52,7 @@ export const router = createBrowserRouter([
     element: <DashboardLayout />,
     children: [
       { index: true, element: <Dashboard /> },
+      { path: 'decision-log', element: <Navigate to="/dashboard/projects" replace /> },
       { path: 'projects', element: <DashboardProjects /> },
       { path: 'project-list', element: <DashboardProjectList /> },
       { path: 'projects/new', element: <ProjectNew /> },
