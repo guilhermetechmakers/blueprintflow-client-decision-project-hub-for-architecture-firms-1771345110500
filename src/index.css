@@ -1,68 +1,82 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    /* UI Guide: Primary Slate Blue #2B4F8C, Accent Teal #2AB7A9 */
+    --background: 248 250 252;
+    --foreground: 31 41 51;
+    --card: 255 255 255;
+    --card-foreground: 31 41 51;
+    --primary: 43 79 140;
+    --primary-foreground: 255 255 255;
+    --secondary: 248 250 252;
+    --secondary-foreground: 31 41 51;
+    --accent: 42 183 169;
+    --accent-foreground: 255 255 255;
+    --muted: 248 250 252;
+    --muted-foreground: 107 114 128;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 43 79 140;
+    --destructive: 220 38 38;
+    --success: 22 163 74;
+    --warning: 245 158 11;
   }
-  a:hover {
-    color: #747bff;
+
+  .dark {
+    --background: 31 41 51;
+    --foreground: 248 250 252;
+    --card: 55 65 81;
+    --card-foreground: 248 250 252;
+    --primary: 59 130 246;
+    --primary-foreground: 255 255 255;
+    --secondary: 55 65 81;
+    --secondary-foreground: 248 250 252;
+    --accent: 42 183 169;
+    --accent-foreground: 255 255 255;
+    --muted: 55 65 81;
+    --muted-foreground: 156 163 175;
+    --border: 75 85 99;
+    --input: 75 85 99;
+    --ring: 59 130 246;
+    --destructive: 239 68 68;
+    --success: 34 197 94;
+    --warning: 245 158 11;
   }
-  button {
-    background-color: #f9f9f9;
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-body antialiased;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  h1 {
+    @apply text-h1 font-semibold;
+  }
+
+  h2 {
+    @apply text-h2 font-semibold;
+  }
+
+  h3 {
+    @apply text-h3 font-semibold;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

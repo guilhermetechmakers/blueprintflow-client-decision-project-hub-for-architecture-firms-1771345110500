@@ -1,0 +1,60 @@
+export interface User {
+  id: string
+  email: string
+  name: string
+  avatarUrl?: string
+  role: 'admin' | 'pm' | 'member' | 'client'
+}
+
+export interface Project {
+  id: string
+  name: string
+  status: 'active' | 'on_hold' | 'completed'
+  clientName?: string
+  updatedAt: string
+  pendingApprovals?: number
+}
+
+export interface Decision {
+  id: string
+  projectId: string
+  title: string
+  description: string
+  status: 'draft' | 'pending' | 'approved' | 'changes_requested'
+  options: DecisionOption[]
+  recommendedOptionId?: string
+  approvedOptionId?: string
+  approvedAt?: string
+  approvedBy?: string
+}
+
+export interface DecisionOption {
+  id: string
+  title: string
+  description?: string
+  costDelta?: number
+  imageUrl?: string
+}
+
+export interface TimelinePhase {
+  id: string
+  name: string
+  startDate: string
+  endDate: string
+  milestones: Milestone[]
+}
+
+export interface Milestone {
+  id: string
+  title: string
+  dueDate: string
+  status: 'pending' | 'in_progress' | 'done'
+}
+
+export interface ActivityItem {
+  id: string
+  type: 'decision' | 'document' | 'message' | 'task'
+  title: string
+  timestamp: string
+  projectId?: string
+}
