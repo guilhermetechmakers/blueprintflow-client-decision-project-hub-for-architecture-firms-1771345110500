@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import {
   QuickFilters,
@@ -15,7 +16,15 @@ const PAGE_TITLE = 'Project list — BlueprintFlow'
 
 export default function DashboardProjectList() {
   const [filters, setFilters] = useState<DashboardProjectListFilters | undefined>(undefined)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchQuery = searchParams.get('q') ?? ''
+
+  const setSearchQuery = (value: string) => {
+    const next = new URLSearchParams(searchParams)
+    if (value.trim()) next.set('q', value.trim())
+    else next.delete('q')
+    setSearchParams(next, { replace: true })
+  }
 
   useEffect(() => {
     const prev = document.title

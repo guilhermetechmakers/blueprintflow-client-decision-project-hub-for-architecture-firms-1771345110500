@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useSidebar } from '@/contexts/sidebar-context'
 import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -13,9 +13,24 @@ import { useAuth } from '@/hooks/use-auth'
 import { CreateProjectCTA } from '@/components/dashboard-project-list'
 import { NotificationsDropdown } from '@/components/notifications/NotificationsDropdown'
 
+const PROJECT_LIST_PATH = '/dashboard/project-list'
+
 export function DashboardTopbar() {
   const { width: sidebarWidth } = useSidebar()
   const { user } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const isProjectList = location.pathname === PROJECT_LIST_PATH
+  const globalSearch = isProjectList ? (searchParams.get('q') ?? '') : ''
+
+  const handleSearchChange = (value: string) => {
+    if (!isProjectList) return
+    const next = new URLSearchParams(searchParams)
+    if (value.trim()) next.set('q', value.trim())
+    else next.delete('q')
+    navigate({ pathname: location.pathname, search: next.toString() }, { replace: true })
+  }
 
   return (
     <header
@@ -25,7 +40,13 @@ export function DashboardTopbar() {
       <div className="flex-1 flex items-center gap-4">
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" aria-hidden />
-          <Input placeholder="Search projects, clients..." className="pl-9 h-9 bg-muted/50 border-border focus:bg-card transition-colors" aria-label="Global search" />
+          <Input
+            placeholder="Search projects, clients..."
+            className="pl-9 h-9 bg-muted/50 border-border focus:bg-card transition-colors"
+            aria-label="Global search"
+            value={isProjectList ? globalSearch : undefined}
+            onChange={isProjectList ? (e) => handleSearchChange(e.target.value) : undefined}
+          />
         </div>
       </div>
       <div className="flex items-center gap-2 shrink-0">
