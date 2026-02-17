@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useSidebar } from '@/contexts/sidebar-context'
-import { Search, Bell, Plus } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -10,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/hooks/use-auth'
+import { CreateProjectCTA } from '@/components/dashboard-project-list'
+import { NotificationsDropdown } from '@/components/notifications/NotificationsDropdown'
 
 export function DashboardTopbar() {
   const { width: sidebarWidth } = useSidebar()
@@ -22,24 +24,22 @@ export function DashboardTopbar() {
     >
       <div className="flex-1 flex items-center gap-4">
         <div className="relative w-full max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input placeholder="Search projects..." className="pl-9 h-9" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" aria-hidden />
+          <Input placeholder="Search projects, clients..." className="pl-9 h-9 bg-muted/50 border-border focus:bg-card transition-colors" aria-label="Global search" />
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        <Button variant="accent" size="sm" asChild>
-          <Link to="/dashboard/projects/new">
-            <Plus className="size-4" />
-            New project
-          </Link>
-        </Button>
-        <Button variant="tertiary" size="icon" aria-label="Notifications">
-          <Bell className="size-4" />
-        </Button>
+      <div className="flex items-center gap-2 shrink-0">
+        <CreateProjectCTA variant="dropdown" className="shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all" />
+        <NotificationsDropdown />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="tertiary" size="icon" className="rounded-full">
-              <span className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-medium">
+            <Button
+              variant="tertiary"
+              size="icon"
+              className="size-10 rounded-full overflow-hidden"
+              aria-label="User menu"
+            >
+              <span className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold text-body">
                 {user?.name?.charAt(0) ?? 'U'}
               </span>
             </Button>

@@ -355,27 +355,30 @@ All dashboard pages should be nested inside the dashboard layout, not separate r
 ## Components and Pages to Build
 
 **Main Page:**
-- `src/pages/Messages(ContextualCommunication).tsx` - Main page component
+- `src/pages/Dashboard(ProjectList).tsx` - Main page component
 - Export default page component
 - Implement data fetching with React Query or SWR
 - Handle loading and error states
 
 **Related Components:**
-- `src/components/messages-(contextual-communication)/ThreadList:groupedbycontext(decisionX,drawingY),unreadindicators.tsx`
-- `src/components/messages-(contextual-communication)/MessageComposer:texteditor,attachments,mentions,linktorelateditem.tsx`
-- `src/components/messages-(contextual-communication)/ThreadView:chronologicalmessages,inlineattachmentsandpreviews,quickactions(createtask,requestapproval).tsx`
-- `src/components/messages-(contextual-communication)/SearchinMessages:keywordandcontextfilters.tsx`
+- `src/components/dashboard-(project-list)/TopBar:globalsearch,useravatar,notifications,quickcreatebutton.tsx`
+- `src/components/dashboard-(project-list)/ProjectTiles/List:statusbadges,phasetimeline,percentcomplete,pendingapprovalscount.tsx`
+- `src/components/dashboard-(project-list)/ActivityFeed:recentcomments,approvals,uploadsacrossuser'sprojects.tsx`
+- `src/components/dashboard-(project-list)/QuickFilters:byrole(owner/member/client),status(active,archived),duesoon.tsx`
+- `src/components/dashboard-(project-list)/CTA:CreateProject(fromtemplateorblank).tsx`
 
 ## Navigation Between Components and Pages
 
 **Routing Setup:**
-- Add route: `/messages-(contextual-communication)` in your routing configuration
+- Add route: `/dashboard-(project-list)` in your routing configuration
 - Update navigation menu to include this page
 - Ensure proper route guards if authentication is required
 
 **Navigation Flow:**
-- **Manage Users:**
-- **Participate in Contextual Discussion:**
+- **View Project Dashboard:**
+- **Open Project Workspace:**
+  - Trigger: User action
+  - Result: Navigate to next step
 
 **Integration Points:**
 - Update navigation components to include new routes
@@ -385,21 +388,22 @@ All dashboard pages should be nested inside the dashboard layout, not separate r
 
 **Complete User Journey:**
 
-1. **Manage Users** (step_page)
-   - Admin manages firm/team users: invite, edit roles, deactivate, or reset passwords.
+1. **View Project Dashboard** (step_page)
+   - User lands on their dashboard listing active projects, pending approvals, and recent updates.
    - Page type: Standard page
 
-2. **Participate in Contextual Discussion** (step_page)
-   - Guest joins a discussion thread attached to the shared document or decision.
-   - Page type: Standard page
+2. **Open Project Workspace** (action)
+   - User selects a project to enter its main workspace with timeline, decisions, documents, and messaging.
+   - Action: User performs action
+   - Expected result: Action completes successfully
 
 ## Data Schema to be Implemented
 
 **Database Tables:**
 
 ```sql
--- messages_(contextual_communication) table
-CREATE TABLE messages_(contextual_communication) (
+-- dashboard_(project_list) table
+CREATE TABLE dashboard_(project_list) (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
@@ -414,29 +418,29 @@ CREATE TABLE messages_(contextual_communication) (
 
 ```sql
 -- Enable RLS
-ALTER TABLE messages_(contextual_communication) ENABLE ROW LEVEL SECURITY;
+ALTER TABLE dashboard_(project_list) ENABLE ROW LEVEL SECURITY;
 
 -- Users can read their own data
-CREATE POLICY "messages_(contextual_communication)_read_own" ON messages_(contextual_communication)
+CREATE POLICY "dashboard_(project_list)_read_own" ON dashboard_(project_list)
   FOR SELECT USING (auth.uid() = user_id);
 
 -- Users can insert their own data
-CREATE POLICY "messages_(contextual_communication)_insert_own" ON messages_(contextual_communication)
+CREATE POLICY "dashboard_(project_list)_insert_own" ON dashboard_(project_list)
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- Users can update their own data
-CREATE POLICY "messages_(contextual_communication)_update_own" ON messages_(contextual_communication)
+CREATE POLICY "dashboard_(project_list)_update_own" ON dashboard_(project_list)
   FOR UPDATE USING (auth.uid() = user_id);
 
 -- Users can delete their own data
-CREATE POLICY "messages_(contextual_communication)_delete_own" ON messages_(contextual_communication)
+CREATE POLICY "dashboard_(project_list)_delete_own" ON dashboard_(project_list)
   FOR DELETE USING (auth.uid() = user_id);
 ```
 
 **TypeScript Types:**
 
 ```typescript
-interface Messages(ContextualCommunication) {
+interface Dashboard(ProjectList) {
   id: string;
   user_id: string;
   title: string;
@@ -450,15 +454,16 @@ interface Messages(ContextualCommunication) {
 ## Acceptance Criteria
 
 **Functional Requirements:**
-- [ ] Messages (Contextual Communication) is fully implemented according to scope
+- [ ] Dashboard (Project List) is fully implemented according to scope
 - [ ] All required elements are present and functional
-- [ ] Thread List: grouped by context (decision X, drawing Y), unread indicators is implemented and working
-- [ ] Message Composer: text editor, attachments, mentions, link to related item is implemented and working
-- [ ] Thread View: chronological messages, inline attachments and previews, quick actions (create task, request approval) is implemented and working
-- [ ] Search in Messages: keyword and context filters is implemented and working
+- [ ] Top Bar: global search, user avatar, notifications, quick create button is implemented and working
+- [ ] Project Tiles / List: status badges, phase timeline, percent complete, pending approvals count is implemented and working
+- [ ] Activity Feed: recent comments, approvals, uploads across user's projects is implemented and working
+- [ ] Quick Filters: by role (owner/member/client), status (active, archived), due soon is implemented and working
+- [ ] CTA: Create Project (from template or blank) is implemented and working
 - [ ] User flows work end-to-end without errors:
-  - [ ] Manage Users
-  - [ ] Participate in Contextual Discussion
+  - [ ] View Project Dashboard
+  - [ ] Open Project Workspace
 - [ ] Proper error handling and user feedback
 - [ ] Loading states are implemented
 - [ ] Empty states are designed

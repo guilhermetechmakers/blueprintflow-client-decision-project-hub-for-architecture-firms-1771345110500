@@ -119,6 +119,35 @@ export interface ActivityItem {
   subtype?: 'comment' | 'approval' | 'upload'
 }
 
+/** In-app notification item */
+export type NotificationType = 'comment' | 'approval' | 'upload' | 'mention' | 'due_soon' | 'weekly_summary'
+
+export interface Notification {
+  id: string
+  type: NotificationType
+  title: string
+  body?: string
+  read: boolean
+  createdAt: string
+  projectId?: string
+  projectName?: string
+  link?: string
+}
+
+/** User notification preferences (in-app, email, push, weekly summary) */
+export interface NotificationPreferences {
+  inApp: boolean
+  email: boolean
+  push: boolean
+  weeklySummary: boolean
+  /** Weekly summary: include "what changed" */
+  weeklySummaryWhatChanged: boolean
+  /** Weekly summary: include "what's next" */
+  weeklySummaryWhatsNext: boolean
+  /** Weekly summary: include "what we need from you" */
+  weeklySummaryWhatWeNeed: boolean
+}
+
 /** Auth/session record for login/signup (table: login_/_signup) */
 export interface LoginSignup {
   id: string
