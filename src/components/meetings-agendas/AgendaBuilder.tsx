@@ -35,7 +35,16 @@ export function AgendaBuilder({
   const [newTitle, setNewTitle] = useState('')
   const [newDuration, setNewDuration] = useState(15)
   const [newOwner, setNewOwner] = useState('')
+  const [newLinkedDecisions, setNewLinkedDecisions] = useState('')
+  const [newLinkedDocuments, setNewLinkedDocuments] = useState('')
   const [expandedId, setExpandedId] = useState<string | null>(null)
+
+  const parseIds = (s: string): string[] =>
+    s
+      .trim()
+      .split(/[\s,]+/)
+      .map((id) => id.trim())
+      .filter(Boolean)
 
   const handleAdd = () => {
     if (!newTitle.trim() || !canEdit || !onAddTopic) return
@@ -43,10 +52,14 @@ export function AgendaBuilder({
       title: newTitle.trim(),
       durationMinutes: newDuration,
       ownerName: newOwner.trim() || undefined,
+      linkedDecisionIds: parseIds(newLinkedDecisions),
+      linkedDocumentIds: parseIds(newLinkedDocuments),
     })
     setNewTitle('')
     setNewDuration(15)
     setNewOwner('')
+    setNewLinkedDecisions('')
+    setNewLinkedDocuments('')
   }
 
   const totalMinutes = topics.reduce((acc, t) => acc + t.durationMinutes, 0)
@@ -55,12 +68,12 @@ export function AgendaBuilder({
     return (
       <Card className="overflow-hidden transition-all duration-200 hover:shadow-card-hover">
         <CardHeader>
-          <Skeleton className="h-6 w-48" />
-          <Skeleton className="h-4 w-64 mt-2" />
+          <Skeleton className="h-6 w-48 skeleton-shimmer" />
+          <Skeleton className="h-4 w-64 mt-2 skeleton-shimmer" />
         </CardHeader>
         <CardContent className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-16 w-full rounded-lg" />
+            <Skeleton key={i} className="h-16 w-full rounded-lg skeleton-shimmer" />
           ))}
         </CardContent>
       </Card>
@@ -126,6 +139,28 @@ export function AgendaBuilder({
                 value={newOwner}
                 onChange={(e) => setNewOwner(e.target.value)}
               />
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="agenda-topic-decisions">Link to decisions (IDs, comma-separated)</Label>
+                <Input
+                  id="agenda-topic-decisions"
+                  placeholder="e.g. dec-1, dec-2"
+                  value={newLinkedDecisions}
+                  onChange={(e) => setNewLinkedDecisions(e.target.value)}
+                  className="focus-visible:ring-2 focus-visible:ring-accent"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="agenda-topic-documents">Link to documents (IDs, comma-separated)</Label>
+                <Input
+                  id="agenda-topic-documents"
+                  placeholder="e.g. doc-1, doc-2"
+                  value={newLinkedDocuments}
+                  onChange={(e) => setNewLinkedDocuments(e.target.value)}
+                  className="focus-visible:ring-2 focus-visible:ring-accent"
+                />
+              </div>
             </div>
             <div className="flex gap-2">
               <Button size="sm" onClick={handleAdd} disabled={!newTitle.trim()}>

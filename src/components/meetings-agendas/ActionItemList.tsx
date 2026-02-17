@@ -44,6 +44,7 @@ export function ActionItemList({
   const [newDesc, setNewDesc] = useState('')
   const [newAssignee, setNewAssignee] = useState('')
   const [newDue, setNewDue] = useState('')
+  const [newLinkedTaskId, setNewLinkedTaskId] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
   const handleAdd = async () => {
@@ -55,11 +56,13 @@ export function ActionItemList({
         description: newDesc.trim() || undefined,
         assigneeName: newAssignee.trim() || undefined,
         dueDate: newDue || undefined,
+        linkedTaskId: newLinkedTaskId.trim() || undefined,
       })
       setNewTitle('')
       setNewDesc('')
       setNewAssignee('')
       setNewDue('')
+      setNewLinkedTaskId('')
       setShowForm(false)
     } finally {
       setSubmitting(false)
@@ -139,6 +142,7 @@ export function ActionItemList({
                   placeholder="Name"
                   value={newAssignee}
                   onChange={(e) => setNewAssignee(e.target.value)}
+                  className="focus-visible:ring-2 focus-visible:ring-accent"
                 />
               </div>
               <div className="space-y-2">
@@ -148,8 +152,22 @@ export function ActionItemList({
                   type="date"
                   value={newDue}
                   onChange={(e) => setNewDue(e.target.value)}
+                  className="focus-visible:ring-2 focus-visible:ring-accent"
                 />
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="action-linked-task">Link to project task (task ID)</Label>
+              <Input
+                id="action-linked-task"
+                placeholder="e.g. task-123"
+                value={newLinkedTaskId}
+                onChange={(e) => setNewLinkedTaskId(e.target.value)}
+                className="focus-visible:ring-2 focus-visible:ring-accent"
+              />
+              <p className="text-small text-muted-foreground">
+                Link this action item back to a project task for tracking.
+              </p>
             </div>
             <div className="flex gap-2">
               <Button size="sm" onClick={handleAdd} disabled={!newTitle.trim() || submitting}>
@@ -248,13 +266,17 @@ export function ActionItemList({
         </div>
 
         {!isLoading && actionItems.length === 0 && (
-          <div className="rounded-lg border border-dashed border-border py-8 text-center text-small text-muted-foreground animate-fade-in">
-            <p>No action items yet. Create one from meeting notes or add above.</p>
+          <div className="rounded-lg border border-dashed border-border py-12 px-4 text-center animate-fade-in">
+            <CheckSquare className="size-10 text-muted-foreground mx-auto mb-3" aria-hidden />
+            <p className="text-body font-medium text-foreground mb-1">No action items yet</p>
+            <p className="text-small text-muted-foreground mb-4 max-w-sm mx-auto">
+              Create action items from meeting notes or add one below. Assign owners, set due dates, and link back to project tasks.
+            </p>
             {canEdit && onAdd && (
               <Button
                 variant="secondary"
                 size="sm"
-                className="mt-3 transition-all duration-200 hover:scale-[1.02]"
+                className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 onClick={() => setShowForm(true)}
               >
                 <Plus className="size-4" />

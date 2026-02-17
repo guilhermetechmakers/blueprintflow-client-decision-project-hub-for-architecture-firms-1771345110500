@@ -58,6 +58,7 @@ export const router = createBrowserRouter([
       { path: 'projects', element: <DashboardProjects /> },
       { path: 'project-list', element: <DashboardProjectList /> },
       { path: 'meetings-agendas', element: <MeetingsAgendasPage /> },
+      { path: 'meetings-&-agendas', element: <Navigate to="/dashboard/meetings-agendas" replace /> },
       { path: 'projects/new', element: <ProjectNew /> },
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },

@@ -134,8 +134,12 @@ export function MeetingNotes({
         </ul>
 
         {!isLoading && notes.length === 0 && !newContent && (
-          <div className="rounded-lg border border-dashed border-border py-8 text-center text-small text-muted-foreground animate-fade-in">
-            <p>No notes yet. Add the first note above to start collaborative notes.</p>
+          <div className="rounded-lg border border-dashed border-border py-12 px-4 text-center animate-fade-in">
+            <FileText className="size-10 text-muted-foreground mx-auto mb-3" aria-hidden />
+            <p className="text-body font-medium text-foreground mb-1">No notes yet</p>
+            <p className="text-small text-muted-foreground max-w-sm mx-auto">
+              Add the first note above to start live collaborative notes. Create action items from selected text or via the button.
+            </p>
           </div>
         )}
       </CardContent>

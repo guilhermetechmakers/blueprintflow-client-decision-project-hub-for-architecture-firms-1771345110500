@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CalendarDays, Plus, ArrowLeft, Loader2 } from 'lucide-react'
+import { CalendarDays, Plus, ArrowLeft, Loader2, AlertCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -29,11 +29,13 @@ import {
 import { toast } from 'sonner'
 
 const PAGE_TITLE = 'Meetings & Agendas — BlueprintFlow'
+const PAGE_DESCRIPTION =
+  'Create meeting agendas, invite attendees, track notes and action items linked to decisions and documents.'
 
 export default function MeetingsAgendasPage() {
   const [selectedMeetingId, setSelectedMeetingId] = useState<string | null>(null)
 
-  const { meetings, isLoading: listLoading } = useMeetingsAgendasList()
+  const { meetings, isLoading: listLoading, isError: listError, refetch: refetchList } = useMeetingsAgendasList()
   const { data: meeting, isLoading: meetingLoading } = useMeeting(selectedMeetingId)
   const createMeetingMutation = useCreateMeeting()
 
@@ -54,10 +56,20 @@ export default function MeetingsAgendasPage() {
   const deleteActionMutation = useDeleteActionItem(selectedMeetingId ?? undefined)
 
   useEffect(() => {
-    const prev = document.title
+    const prevTitle = document.title
+    const prevMeta = document.querySelector('meta[name="description"]')?.getAttribute('content') ?? null
     document.title = PAGE_TITLE
+    let meta = document.querySelector('meta[name="description"]')
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.setAttribute('name', 'description')
+      document.head.appendChild(meta)
+    }
+    meta.setAttribute('content', PAGE_DESCRIPTION)
     return () => {
-      document.title = prev
+      document.title = prevTitle
+      if (prevMeta !== null) meta?.setAttribute('content', prevMeta)
+      else meta?.remove()
     }
   }, [])
 
@@ -159,14 +171,36 @@ export default function MeetingsAgendasPage() {
 
   const currentUserRsvp = rsvps.find((r) => r.userId === 'u1')?.status
 
+  if (listError) {
+    return (
+      <div className="p-6 space-y-6 animate-fade-in">
+        <h1 className="text-h1 font-semibold">Meetings & Agendas</h1>
+        <Card className="overflow-hidden border-destructive/30">
+          <CardContent className="flex flex-col items-center justify-center py-16">
+            <AlertCircle className="size-12 text-destructive mb-4" aria-hidden />
+            <p className="text-body text-foreground text-center mb-2">
+              Unable to load meetings. Please check your connection and try again.
+            </p>
+            <Button
+              className="mt-4 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              onClick={() => refetchList()}
+            >
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   if (listLoading) {
     return (
       <div className="p-6 space-y-6 animate-fade-in">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-24 w-full rounded-lg" />
+        <Skeleton className="h-8 w-64 skeleton-shimmer" />
+        <Skeleton className="h-24 w-full rounded-lg skeleton-shimmer" />
         <div className="grid gap-4 md:grid-cols-2">
-          <Skeleton className="h-48 rounded-lg" />
-          <Skeleton className="h-48 rounded-lg" />
+          <Skeleton className="h-48 rounded-lg skeleton-shimmer" />
+          <Skeleton className="h-48 rounded-lg skeleton-shimmer" />
         </div>
       </div>
     )
@@ -249,8 +283,8 @@ export default function MeetingsAgendasPage() {
   if (meetingLoading && !meeting) {
     return (
       <div className="p-6 animate-fade-in">
-        <Skeleton className="h-8 w-48 mb-4" />
-        <Skeleton className="h-64 w-full rounded-lg" />
+        <Skeleton className="h-8 w-48 mb-4 skeleton-shimmer" />
+        <Skeleton className="h-64 w-full rounded-lg skeleton-shimmer" />
       </div>
     )
   }

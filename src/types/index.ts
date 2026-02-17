@@ -288,3 +288,71 @@ export interface MeetingNote {
   authorName: string
   updated_at: string
 }
+
+/** Project task (action item) linked to decision or milestone */
+export type ProjectTaskStatus = 'todo' | 'in_progress' | 'done'
+
+export interface ProjectTask {
+  id: string
+  projectId: string
+  title: string
+  description?: string
+  status: ProjectTaskStatus
+  assigneeId?: string
+  assigneeName?: string
+  dueDate?: string
+  decisionId?: string
+  decisionTitle?: string
+  milestoneId?: string
+  milestoneTitle?: string
+  created_at: string
+  updated_at: string
+}
+
+/** RFI (Request for Information) */
+export type RfiStatus = 'open' | 'answered' | 'closed'
+
+export interface Rfi {
+  id: string
+  projectId: string
+  title: string
+  description?: string
+  status: RfiStatus
+  question: string
+  response?: string
+  askedById?: string
+  askedByName?: string
+  answeredById?: string
+  answeredByName?: string
+  answeredAt?: string
+  decisionId?: string
+  decisionTitle?: string
+  milestoneId?: string
+  milestoneTitle?: string
+  dueDate?: string
+  created_at: string
+  updated_at: string
+}
+
+/** Formal change request */
+export type ChangeRequestStatus = 'draft' | 'submitted' | 'under_review' | 'approved' | 'rejected'
+
+export interface ChangeRequest {
+  id: string
+  projectId: string
+  title: string
+  description?: string
+  status: ChangeRequestStatus
+  impactScope?: string
+  costImpact?: number
+  scheduleImpact?: string
+  submittedById?: string
+  submittedByName?: string
+  submittedAt?: string
+  decisionId?: string
+  decisionTitle?: string
+  milestoneId?: string
+  milestoneTitle?: string
+  created_at: string
+  updated_at: string
+}

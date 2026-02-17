@@ -81,7 +81,7 @@ export default function MessagesContextualCommunication() {
       <div className="p-6 animate-fade-in">
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <MessageSquare className="size-12 text-muted-foreground mb-4" />
+            <MessageSquare className="size-12 text-muted-foreground mb-4" aria-hidden />
             <p className="text-body text-muted-foreground text-center">
               Select a project to view contextual messages.
             </p>
@@ -90,6 +90,8 @@ export default function MessagesContextualCommunication() {
       </div>
     )
   }
+
+  const hasNoThreads = !isLoadingThreads && threads.length === 0
 
   return (
     <div className="flex flex-col h-full min-h-0 animate-fade-in p-6">
@@ -110,47 +112,47 @@ export default function MessagesContextualCommunication() {
         />
       </div>
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-4 min-h-0">
-        <aside className="flex flex-col min-h-0 border border-border rounded-lg bg-card overflow-hidden">
-          <div className="p-2 border-b border-border shrink-0">
-            <p className="text-small font-medium text-muted-foreground px-2">
-              Threads by context
-            </p>
-          </div>
-          <div className="flex-1 overflow-auto p-2 min-h-0">
-            <ThreadList
-              threads={threads}
-              isLoading={isLoadingThreads}
-              selectedThreadId={selectedThreadId}
-              onSelectThread={setSelectedThreadId}
-            />
-          </div>
-        </aside>
-
-        <div className="min-h-0 flex flex-col">
-          <ThreadView
-            thread={selectedThread ?? null}
-            messages={messages}
-            isLoadingThread={!!selectedThreadId && isLoadingThread}
-            isLoadingMessages={isLoadingMessages}
-            onSendMessage={handleSendMessage}
-            isSending={sendMutation.isPending}
-            onCreateTask={handleCreateTask}
-            onRequestApproval={handleRequestApproval}
-          />
-        </div>
-      </div>
-
-      {!isLoadingThreads && threads.length === 0 && (
-        <Card className="mt-4">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <MessageSquare className="size-12 text-muted-foreground mb-4" />
+      {hasNoThreads ? (
+        <Card className="flex-1 flex flex-col min-h-0 animate-fade-in-up">
+          <CardContent className="flex-1 flex flex-col items-center justify-center py-16 px-6">
+            <MessageSquare className="size-12 text-muted-foreground mb-4" aria-hidden />
             <p className="text-body font-medium text-center">No threads yet</p>
-            <p className="text-small text-muted-foreground text-center mt-1">
-              Start a conversation from a decision, document, or task to see threads here.
+            <p className="text-small text-muted-foreground text-center mt-1 max-w-md">
+              Start a conversation from a decision, document, or task to see threads here. Threads are grouped by context with unread indicators.
             </p>
           </CardContent>
         </Card>
+      ) : (
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-4 min-h-0">
+          <aside className="flex flex-col min-h-0 border border-border rounded-lg bg-card overflow-hidden shadow-card">
+            <div className="p-2 border-b border-border shrink-0">
+              <p className="text-small font-medium text-muted-foreground px-2">
+                Threads by context
+              </p>
+            </div>
+            <div className="flex-1 overflow-auto p-2 min-h-0">
+              <ThreadList
+                threads={threads}
+                isLoading={isLoadingThreads}
+                selectedThreadId={selectedThreadId}
+                onSelectThread={setSelectedThreadId}
+              />
+            </div>
+          </aside>
+
+          <div className="min-h-0 flex flex-col">
+            <ThreadView
+              thread={selectedThread ?? null}
+              messages={messages}
+              isLoadingThread={!!selectedThreadId && isLoadingThread}
+              isLoadingMessages={isLoadingMessages}
+              onSendMessage={handleSendMessage}
+              isSending={sendMutation.isPending}
+              onCreateTask={handleCreateTask}
+              onRequestApproval={handleRequestApproval}
+            />
+          </div>
+        </div>
       )}
     </div>
   )

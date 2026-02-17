@@ -93,18 +93,18 @@ export function ThreadView({
 
   if (isLoadingThread || !thread) {
     return (
-      <div className={cn('flex flex-col h-full', className)}>
+      <div className={cn('flex flex-col h-full rounded-lg border border-border bg-card', className)}>
         <div className="border-b border-border p-4">
-          <Skeleton className="h-6 w-3/4 mb-2" />
-          <Skeleton className="h-4 w-1/2" />
+          <Skeleton className="h-6 w-[75%] mb-2 rounded" />
+          <Skeleton className="h-4 w-1/2 rounded" />
         </div>
         <div className="flex-1 overflow-auto p-4 space-y-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex gap-3">
               <Skeleton className="size-8 rounded-full shrink-0" />
               <div className="flex-1 space-y-1">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-4 w-24 rounded" />
+                <Skeleton className="h-16 w-full rounded" />
               </div>
             </div>
           ))}
@@ -113,9 +113,13 @@ export function ThreadView({
     )
   }
 
+  const sortedMessages = [...messages].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  )
+
   return (
-    <div className={cn('flex flex-col h-full min-h-0', className)}>
-      <div className="shrink-0 border-b border-border bg-card p-4">
+    <div className={cn('flex flex-col h-full min-h-0 rounded-lg border border-border bg-card overflow-hidden', className)}>
+      <div className="shrink-0 border-b border-border p-4">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div>
             <h2 className="text-h3 font-semibold text-foreground">{thread.subject}</h2>
@@ -132,6 +136,7 @@ export function ThreadView({
                 size="sm"
                 className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 onClick={() => onCreateTask(thread.id)}
+                aria-label="Create task from this thread"
               >
                 <CheckSquare className="size-4" />
                 Create task
@@ -144,6 +149,7 @@ export function ThreadView({
                 size="sm"
                 className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 onClick={() => onRequestApproval(thread.id)}
+                aria-label="Request approval for this thread"
               >
                 <UserPlus className="size-4" />
                 Request approval
@@ -153,20 +159,20 @@ export function ThreadView({
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto min-h-0">
+      <div className="flex-1 overflow-auto min-h-0" role="log" aria-live="polite" aria-label="Thread messages">
         {isLoadingMessages ? (
           <div className="p-4 space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex gap-3">
                 <Skeleton className="size-8 rounded-full shrink-0" />
                 <div className="flex-1 space-y-1">
-                  <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-4 w-24 rounded" />
+                  <Skeleton className="h-12 w-full rounded" />
                 </div>
               </div>
             ))}
           </div>
-        ) : messages.length === 0 ? (
+        ) : sortedMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <p className="text-body text-muted-foreground text-center">
               No messages yet. Start the conversation below.
@@ -174,7 +180,7 @@ export function ThreadView({
           </div>
         ) : (
           <ul className="p-4 space-y-4 animate-fade-in">
-            {messages.map((msg) => (
+            {sortedMessages.map((msg) => (
               <li key={msg.id} className="flex gap-3">
                 <div
                   className="size-8 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary text-small font-medium"
@@ -198,9 +204,9 @@ export function ThreadView({
                     <div className="mt-2 flex flex-wrap gap-2">
                       {msg.attachments.map((att) => (
                         <AttachmentPreview key={att.id} att={att} />
-                    ))}
-                  </div>
-                ) : null}
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               </li>
             ))}

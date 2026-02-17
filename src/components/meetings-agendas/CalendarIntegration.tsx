@@ -133,7 +133,7 @@ export function CalendarIntegration({
               <Skeleton className="h-8 w-full rounded-md" />
             </div>
           ) : rsvps.length === 0 ? (
-            <p className="text-small text-muted-foreground">No responses yet.</p>
+            <p className="text-small text-muted-foreground">No RSVPs yet. Use the buttons above to respond.</p>
           ) : (
             <div className="flex flex-wrap gap-2 mb-2">
               <Badge variant="success" className="font-normal">
