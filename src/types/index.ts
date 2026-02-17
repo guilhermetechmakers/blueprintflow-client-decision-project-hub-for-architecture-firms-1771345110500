@@ -9,10 +9,28 @@ export interface User {
 export interface Project {
   id: string
   name: string
-  status: 'active' | 'on_hold' | 'completed'
+  status: 'active' | 'on_hold' | 'completed' | 'archived'
   clientName?: string
   updatedAt: string
   pendingApprovals?: number
+  /** Phase name for timeline display (e.g. "Schematic Design") */
+  phase?: string
+  /** 0–100 */
+  percentComplete?: number
+  /** User's role on this project */
+  role?: 'owner' | 'member' | 'client'
+  dueDate?: string
+}
+
+/** Dashboard project list table record (dashboard_(project_list)) */
+export interface DashboardProjectListRecord {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  status: string
+  created_at: string
+  updated_at: string
 }
 
 export interface Decision {
@@ -57,6 +75,8 @@ export interface ActivityItem {
   title: string
   timestamp: string
   projectId?: string
+  projectName?: string
+  subtype?: 'comment' | 'approval' | 'upload'
 }
 
 /** Auth/session record for login/signup (table: login_/_signup) */

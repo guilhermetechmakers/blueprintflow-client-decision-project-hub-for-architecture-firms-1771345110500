@@ -3,6 +3,7 @@ import { useSidebar } from '@/contexts/sidebar-context'
 import {
   LayoutDashboard,
   FolderKanban,
+  ListTodo,
   ChevronLeft,
   ChevronRight,
   User,
@@ -15,6 +16,7 @@ import { Button } from '@/components/ui/button'
 const mainNav = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/dashboard/projects', label: 'Projects', icon: FolderKanban },
+  { to: '/dashboard/project-list', label: 'Project list', icon: ListTodo },
 ]
 
 const bottomNav = [

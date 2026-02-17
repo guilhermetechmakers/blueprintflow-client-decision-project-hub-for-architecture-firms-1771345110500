@@ -8,6 +8,7 @@ import { Signup } from '@/pages/signup'
 import LoginSignupPage from '@/pages/Login/Signup'
 import { Dashboard } from '@/pages/dashboard'
 import { DashboardProjects } from '@/pages/dashboard-projects'
+import DashboardProjectList from '@/pages/DashboardProjectList'
 import { ProjectNew } from '@/pages/project-new'
 import { ProjectOverview } from '@/pages/project-overview'
 import { ProjectTimeline } from '@/pages/project-timeline'
@@ -52,6 +53,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
       { path: 'projects', element: <DashboardProjects /> },
+      { path: 'project-list', element: <DashboardProjectList /> },
       { path: 'projects/new', element: <ProjectNew /> },
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
