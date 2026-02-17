@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   FolderKanban,
   ListTodo,
+  CalendarDays,
   ChevronLeft,
   ChevronRight,
   User,
@@ -17,6 +18,7 @@ const mainNav = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/dashboard/projects', label: 'Projects', icon: FolderKanban },
   { to: '/dashboard/project-list', label: 'Project list', icon: ListTodo },
+  { to: '/dashboard/meetings-agendas', label: 'Meetings & Agendas', icon: CalendarDays },
 ]
 
 const bottomNav = [

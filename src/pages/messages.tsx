@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { MessageSquare, Send, MessageCircle } from 'lucide-react'
+import { MessageSquare, MessageCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

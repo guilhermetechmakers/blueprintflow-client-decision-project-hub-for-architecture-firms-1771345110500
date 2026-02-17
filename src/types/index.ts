@@ -172,17 +172,6 @@ export interface ThreadMessage {
   mentionIds?: string[]
 }
 
-/** DB record for messages_(contextual_communication) table */
-export interface MessagesContextualCommunicationRecord {
-  id: string
-  user_id: string
-  title: string
-  description?: string
-  status: string
-  created_at: string
-  updated_at: string
-}
-
 /** Context type for threaded messages */
 export type ThreadContextType = 'decision' | 'document' | 'task' | 'project'
 
@@ -220,4 +209,82 @@ export interface ContextualThread {
   unreadCount: number
   participantCount: number
   status: 'active' | 'archived'
+}
+
+/** DB record for meetings_agendas table (meetings & agendas) */
+export interface MeetingsAgendasRecord {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  status: string
+  created_at: string
+  updated_at: string
+}
+
+/** Agenda topic with time allocation and linked items */
+export interface AgendaTopic {
+  id: string
+  meetingId: string
+  title: string
+  durationMinutes: number
+  orderIndex: number
+  ownerId?: string
+  ownerName?: string
+  linkedDecisionIds: string[]
+  linkedDocumentIds: string[]
+}
+
+/** Meeting with agenda and metadata for list/detail */
+export interface MeetingWithAgenda {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  status: 'draft' | 'scheduled' | 'completed' | 'cancelled'
+  created_at: string
+  updated_at: string
+  startAt?: string
+  endAt?: string
+  location?: string
+  timezone?: string
+  topics?: AgendaTopic[]
+  attendeeIds?: string[]
+}
+
+/** RSVP for a meeting */
+export interface MeetingRsvp {
+  id: string
+  meetingId: string
+  userId: string
+  userName: string
+  status: 'going' | 'maybe' | 'declined'
+  respondedAt: string
+}
+
+/** Action item from meeting notes */
+export interface MeetingActionItem {
+  id: string
+  meetingId: string
+  title: string
+  description?: string
+  assigneeId?: string
+  assigneeName?: string
+  dueDate?: string
+  status: 'open' | 'in_progress' | 'done'
+  linkedTaskId?: string
+  linkedDecisionId?: string
+  linkedDocumentId?: string
+  created_at: string
+  updated_at: string
+}
+
+/** Meeting note (collaborative notes) */
+export interface MeetingNote {
+  id: string
+  meetingId: string
+  content: string
+  authorId: string
+  authorName: string
+  updated_at: string
 }

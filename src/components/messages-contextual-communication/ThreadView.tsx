@@ -1,4 +1,4 @@
-import { CheckSquare, UserPlus } from 'lucide-react'
+import { CheckSquare, UserPlus, MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
@@ -72,6 +72,25 @@ export function ThreadView({
   onRequestApproval,
   className,
 }: ThreadViewProps) {
+  if (!thread && !isLoadingThread) {
+    return (
+      <div
+        className={cn(
+          'flex flex-col h-full min-h-0 rounded-lg border border-border bg-card',
+          className
+        )}
+      >
+        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in">
+          <MessageSquare className="size-12 text-muted-foreground mb-4" aria-hidden />
+          <p className="text-body font-medium text-foreground">Select a thread</p>
+          <p className="text-small text-muted-foreground mt-1 max-w-sm">
+            Choose a thread from the list to view messages, add replies, and use quick actions like create task or request approval.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   if (isLoadingThread || !thread) {
     return (
       <div className={cn('flex flex-col h-full', className)}>

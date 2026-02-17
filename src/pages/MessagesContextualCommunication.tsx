@@ -92,7 +92,7 @@ export default function MessagesContextualCommunication() {
   }
 
   return (
-    <div className="flex flex-col h-full min-h-0 animate-fade-in">
+    <div className="flex flex-col h-full min-h-0 animate-fade-in p-6">
       <header className="shrink-0 mb-4">
         <h1 className="text-h1 font-semibold">Contextual messages</h1>
         <p className="text-body text-muted-foreground mt-1">

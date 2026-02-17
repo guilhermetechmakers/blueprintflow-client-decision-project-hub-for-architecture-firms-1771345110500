@@ -17,6 +17,7 @@ import { Documents } from '@/pages/documents'
 import { Messages } from '@/pages/messages'
 import MessagesContextualCommunication from '@/pages/MessagesContextualCommunication'
 import { Meetings } from '@/pages/meetings'
+import MeetingsAgendasPage from '@/pages/MeetingsAgendas'
 import { Tasks } from '@/pages/tasks'
 import { Reports } from '@/pages/reports'
 import { ProjectSettings } from '@/pages/project-settings'
@@ -56,6 +57,7 @@ export const router = createBrowserRouter([
       { path: 'decision-log', element: <Navigate to="/dashboard/projects" replace /> },
       { path: 'projects', element: <DashboardProjects /> },
       { path: 'project-list', element: <DashboardProjectList /> },
+      { path: 'meetings-agendas', element: <MeetingsAgendasPage /> },
       { path: 'projects/new', element: <ProjectNew /> },
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
