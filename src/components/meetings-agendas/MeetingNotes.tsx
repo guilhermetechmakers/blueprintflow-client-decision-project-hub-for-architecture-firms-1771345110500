@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FileText, Send, Plus, Loader2 } from 'lucide-react'
+import { FileText, Send, Plus, Loader2, FileCheck } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -13,6 +13,7 @@ export interface MeetingNotesProps {
   isLoading: boolean
   onSaveNote?: (content: string) => void
   onCreateActionItem?: (fromNote?: string) => void
+  onRequestApproval?: (context?: { noteId?: string; excerpt?: string }) => void
   isSaving?: boolean
   canEdit?: boolean
 }
@@ -35,6 +36,7 @@ export function MeetingNotes({
   isLoading,
   onSaveNote,
   onCreateActionItem,
+  onRequestApproval,
   isSaving = false,
   canEdit = true,
 }: MeetingNotesProps) {
@@ -51,16 +53,21 @@ export function MeetingNotes({
     onCreateActionItem?.(selection || undefined)
   }
 
+  const handleRequestApproval = () => {
+    const selection = typeof document !== 'undefined' ? document.getSelection()?.toString() : null
+    onRequestApproval?.({ excerpt: selection || newContent.slice(0, 200) })
+  }
+
   if (isLoading) {
     return (
       <Card className="overflow-hidden transition-all duration-200 hover:shadow-card-hover">
         <CardHeader>
-          <Skeleton className="h-6 w-40" />
+          <Skeleton className="h-6 w-40 skeleton-shimmer" />
         </CardHeader>
         <CardContent className="space-y-3">
-          <Skeleton className="h-24 w-full rounded-lg" />
-          <Skeleton className="h-20 w-full rounded-lg" />
-          <Skeleton className="h-20 w-full rounded-lg" />
+          <Skeleton className="h-24 w-full rounded-lg skeleton-shimmer" />
+          <Skeleton className="h-20 w-full rounded-lg skeleton-shimmer" />
+          <Skeleton className="h-20 w-full rounded-lg skeleton-shimmer" />
         </CardContent>
       </Card>
     )
@@ -74,16 +81,32 @@ export function MeetingNotes({
             <FileText className="size-5 text-primary" />
             Meeting notes
           </CardTitle>
-          {canEdit && onCreateActionItem && (
-            <Button
-              size="sm"
-              variant="secondary"
-              className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-              onClick={handleAddActionFromSelection}
-            >
-              <Plus className="size-4" />
-              Create action item
-            </Button>
+          {canEdit && (onCreateActionItem || onRequestApproval) && (
+            <div className="flex flex-wrap gap-2">
+              {onCreateActionItem && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  onClick={handleAddActionFromSelection}
+                >
+                  <Plus className="size-4" />
+                  Create action item
+                </Button>
+              )}
+              {onRequestApproval && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] border-accent/50 text-accent hover:bg-accent/10 focus-visible:ring-2 focus-visible:ring-accent"
+                  onClick={handleRequestApproval}
+                  aria-label="Request approval and link to decision or document"
+                >
+                  <FileCheck className="size-4" />
+                  Request approval
+                </Button>
+              )}
+            </div>
           )}
         </div>
       </CardHeader>

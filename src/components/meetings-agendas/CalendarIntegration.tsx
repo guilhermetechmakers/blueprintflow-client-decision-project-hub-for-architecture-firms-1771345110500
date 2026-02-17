@@ -86,7 +86,7 @@ export function CalendarIntegration({
 
         <div className="flex flex-wrap gap-2">
           {isLoadingIcs ? (
-            <Skeleton className="h-10 w-40 rounded-md" />
+            <Skeleton className="h-10 w-40 rounded-md skeleton-shimmer" />
           ) : (
             <Button
               variant="secondary"
@@ -129,8 +129,8 @@ export function CalendarIntegration({
           </p>
           {isLoadingRsvps ? (
             <div className="space-y-2">
-              <Skeleton className="h-8 w-full rounded-md" />
-              <Skeleton className="h-8 w-full rounded-md" />
+              <Skeleton className="h-8 w-full rounded-md skeleton-shimmer" />
+              <Skeleton className="h-8 w-full rounded-md skeleton-shimmer" />
             </div>
           ) : rsvps.length === 0 ? (
             <p className="text-small text-muted-foreground">No RSVPs yet. Use the buttons above to respond.</p>

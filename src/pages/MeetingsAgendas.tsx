@@ -169,6 +169,10 @@ export default function MeetingsAgendasPage() {
     })
   }
 
+  const handleRequestApproval = () => {
+    toast.success('Request approval linked to discussion. Link to a decision or document in the thread.')
+  }
+
   const currentUserRsvp = rsvps.find((r) => r.userId === 'u1')?.status
 
   if (listError) {
@@ -327,6 +331,7 @@ export default function MeetingsAgendasPage() {
             isLoading={notesLoading}
             onSaveNote={handleSaveNote}
             onCreateActionItem={() => handleCreateAction({ title: 'New action item' })}
+            onRequestApproval={handleRequestApproval}
             isSaving={saveNoteMutation.isPending}
             canEdit
           />
