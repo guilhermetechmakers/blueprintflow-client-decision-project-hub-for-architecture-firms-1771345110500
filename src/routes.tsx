@@ -15,6 +15,7 @@ import { ProjectTimeline } from '@/pages/project-timeline'
 import { DecisionLog } from '@/pages/decision-log'
 import { Documents } from '@/pages/documents'
 import { Messages } from '@/pages/messages'
+import MessagesContextualCommunication from '@/pages/MessagesContextualCommunication'
 import { Meetings } from '@/pages/meetings'
 import { Tasks } from '@/pages/tasks'
 import { Reports } from '@/pages/reports'
@@ -69,6 +70,7 @@ export const router = createBrowserRouter([
           { path: 'decisions', element: <DecisionLog /> },
           { path: 'documents', element: <Documents /> },
           { path: 'messages', element: <Messages /> },
+          { path: 'messages-contextual-communication', element: <MessagesContextualCommunication /> },
           { path: 'meetings', element: <Meetings /> },
           { path: 'tasks', element: <Tasks /> },
           { path: 'reports', element: <Reports /> },

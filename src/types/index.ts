@@ -129,3 +129,95 @@ export interface LoginSignup {
   created_at: string
   updated_at: string
 }
+
+/** DB record for messages_(contextual_communication) table */
+export interface MessagesContextualCommunicationRecord {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  status: string
+  created_at: string
+  updated_at: string
+}
+
+/** Context type for contextual messaging (decision, document, task, project) */
+export type MessageContextType = 'decision' | 'document' | 'task' | 'project'
+
+/** Thread with context and unread state (for list) */
+export interface MessageThread {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  status: string
+  created_at: string
+  updated_at: string
+  contextType?: MessageContextType
+  contextId?: string
+  contextLabel?: string
+  unreadCount?: number
+  lastMessageAt?: string
+}
+
+/** Single message in a thread */
+export interface ThreadMessage {
+  id: string
+  threadId: string
+  body: string
+  authorId: string
+  authorName: string
+  createdAt: string
+  attachments?: MessageAttachment[]
+  mentionIds?: string[]
+}
+
+/** DB record for messages_(contextual_communication) table */
+export interface MessagesContextualCommunicationRecord {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  status: string
+  created_at: string
+  updated_at: string
+}
+
+/** Context type for threaded messages */
+export type ThreadContextType = 'decision' | 'document' | 'task' | 'project'
+
+export interface MessageAttachment {
+  id: string
+  messageId?: string
+  name: string
+  url: string
+  contentType: string
+  size?: number
+}
+
+export interface ContextualMessage {
+  id: string
+  threadId: string
+  authorId: string
+  authorName: string
+  body: string
+  createdAt: string
+  attachments: MessageAttachment[]
+  mentions?: string[]
+  relatedItemId?: string
+  relatedItemType?: ThreadContextType
+}
+
+export interface ContextualThread {
+  id: string
+  projectId: string
+  contextType: ThreadContextType
+  contextId: string
+  contextTitle: string
+  subject: string
+  lastMessageAt: string
+  lastMessagePreview?: string
+  unreadCount: number
+  participantCount: number
+  status: 'active' | 'archived'
+}

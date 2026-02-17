@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom'
-import { MessageSquare, Send } from 'lucide-react'
+import { useParams, Link } from 'react-router-dom'
+import { MessageSquare, Send, MessageCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -35,9 +35,11 @@ export function Messages() {
             <p className="text-body text-muted-foreground text-center mb-4">
               Messages are tied to decisions, documents, or tasks. Choose a context to start.
             </p>
-            <Button variant="secondary">
-              <Send className="size-4" />
-              New message
+            <Button variant="secondary" asChild>
+              <Link to={`messages-contextual-communication`}>
+                <MessageCircle className="size-4" />
+                Contextual messages
+              </Link>
             </Button>
           </CardContent>
         </Card>
