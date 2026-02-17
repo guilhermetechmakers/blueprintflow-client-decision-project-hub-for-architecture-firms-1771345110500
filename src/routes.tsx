@@ -5,6 +5,7 @@ import { ProjectLayout } from '@/layouts/project-layout'
 import { Landing } from '@/pages/landing'
 import { Login } from '@/pages/login'
 import { Signup } from '@/pages/signup'
+import LoginSignupPage from '@/pages/Login/Signup'
 import { Dashboard } from '@/pages/dashboard'
 import { DashboardProjects } from '@/pages/dashboard-projects'
 import { ProjectNew } from '@/pages/project-new'
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
     children: [
       { path: 'login', element: <Login /> },
       { path: 'signup', element: <Signup /> },
+      { path: 'login-/-signup', element: <LoginSignupPage /> },
       { path: 'password-reset', element: <PasswordReset /> },
       { path: 'email-verification', element: <EmailVerification /> },
     ],

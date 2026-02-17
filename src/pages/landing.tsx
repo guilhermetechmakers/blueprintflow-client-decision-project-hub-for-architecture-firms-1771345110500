@@ -44,7 +44,7 @@ export function Landing() {
             <Link to="/pricing" className="text-body text-muted-foreground hover:text-foreground transition-colors">
               Pricing
             </Link>
-            <Link to="/login">
+            <Link to="/login-/-signup">
               <Button variant="tertiary">Log in</Button>
             </Link>
             <Link to="/signup">

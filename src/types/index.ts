@@ -58,3 +58,14 @@ export interface ActivityItem {
   timestamp: string
   projectId?: string
 }
+
+/** Auth/session record for login/signup (table: login_/_signup) */
+export interface LoginSignup {
+  id: string
+  user_id: string
+  title: string
+  description?: string
+  status: string
+  created_at: string
+  updated_at: string
+}
