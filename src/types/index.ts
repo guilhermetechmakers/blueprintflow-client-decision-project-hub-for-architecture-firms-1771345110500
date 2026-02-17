@@ -159,6 +159,15 @@ export interface LoginSignup {
   updated_at: string
 }
 
+/** Client invitation (email, token, status, sent_at) */
+export interface Invitation {
+  id: string
+  email: string
+  token: string
+  status: 'pending' | 'accepted' | 'expired'
+  sent_at: string
+}
+
 /** DB record for messages_(contextual_communication) table */
 export interface MessagesContextualCommunicationRecord {
   id: string

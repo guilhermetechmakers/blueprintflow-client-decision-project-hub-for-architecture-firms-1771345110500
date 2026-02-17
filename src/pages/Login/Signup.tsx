@@ -17,7 +17,12 @@ function LoginSignupPage() {
     const metaDesc = document.querySelector('meta[name="description"]')
     const prevContent = metaDesc?.getAttribute('content') ?? ''
     document.title = 'Sign in or Sign up | BlueprintFlow'
-    if (metaDesc) metaDesc.setAttribute('content', 'Sign in to BlueprintFlow or create an account. Use email, SSO, or an invite token.')
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        'Sign in to BlueprintFlow or create an account. Use email, SSO, or an invite token.'
+      )
+    }
     return () => {
       document.title = prevTitle
       if (metaDesc) metaDesc.setAttribute('content', prevContent)
@@ -28,8 +33,10 @@ function LoginSignupPage() {
     <>
       <Card className="border-0 shadow-none bg-transparent w-full max-w-md animate-fade-in">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-h1">Sign in</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-h1 font-semibold tracking-tight">
+            Sign in
+          </CardTitle>
+          <CardDescription className="text-body">
             Enter your credentials, use SSO, or paste an invite token.
           </CardDescription>
         </CardHeader>
@@ -52,20 +59,24 @@ function LoginSignupPage() {
               <Button
                 type="button"
                 variant="tertiary"
-                className="w-full text-small"
+                className="w-full text-small transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
                 onClick={() => setShowInvite(true)}
               >
                 I have an invite token
               </Button>
             </div>
           ) : (
-            <div className={cn('rounded-lg border border-border bg-muted/30 p-3 space-y-2')}>
+            <div
+              className={cn(
+                'rounded-lg border border-border bg-muted/30 p-3 space-y-2 transition-colors duration-200'
+              )}
+            >
               <MagicLinkInviteFlow />
               <Button
                 type="button"
                 variant="tertiary"
                 size="sm"
-                className="w-full text-small text-muted-foreground"
+                className="w-full text-small text-muted-foreground transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]"
                 onClick={() => setShowInvite(false)}
               >
                 Hide invite token
@@ -79,7 +90,7 @@ function LoginSignupPage() {
               Don&apos;t have an account?{' '}
               <button
                 type="button"
-                className="text-primary font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded"
+                className="text-primary font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 onClick={() => setSignupOpen(true)}
               >
                 Sign up

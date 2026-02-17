@@ -37,20 +37,23 @@ export function LoginForm({ onSuccess, className }: LoginFormProps) {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await login({
+      const res = await login({
         email: data.email,
         password: data.password,
         rememberMe: data.rememberMe,
       })
-      localStorage.setItem('token', 'demo')
+      if (res?.token) {
+        localStorage.setItem('token', res.token)
+      }
       toast.success('Signed in successfully')
       onSuccess?.()
       window.location.href = '/dashboard'
-    } catch {
-      localStorage.setItem('token', 'demo')
-      toast.success('Signed in successfully')
-      onSuccess?.()
-      window.location.href = '/dashboard'
+    } catch (err: unknown) {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: string }).message)
+          : 'Invalid email or password. Please try again.'
+      toast.error(message)
     }
   }
 

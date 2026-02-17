@@ -70,12 +70,20 @@ export default {
           '0%': { opacity: '0', transform: 'scale(0.98)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
         },
+        'gradient-shift': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 0.3s ease-out forwards',
         'fade-in-up': 'fade-in-up 0.4s ease-out forwards',
         'scale-in': 'scale-in 0.2s ease-out forwards',
         shimmer: 'shimmer 1.5s infinite',
+        'gradient-shift': 'gradient-shift 8s ease infinite',
+      },
+      backgroundSize: {
+        'gradient-auth': '200% 200%',
       },
     },
   },

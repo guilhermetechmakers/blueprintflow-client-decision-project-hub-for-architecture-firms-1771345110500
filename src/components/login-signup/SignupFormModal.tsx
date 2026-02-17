@@ -15,13 +15,27 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { signup } from '@/api/auth'
+import { PasswordStrengthIndicator } from '@/components/login-signup/PasswordStrengthIndicator'
 import { cn } from '@/lib/utils'
 
-const schema = z.object({
-  firmName: z.string().min(1, 'Firm name is required'),
-  adminContact: z.string().min(1, 'Admin contact is required').email('Invalid email'),
-  createInitialProject: z.boolean().optional(),
-})
+const passwordSchema = z
+  .string()
+  .min(8, 'At least 8 characters')
+  .regex(/[A-Za-z]/, 'At least one letter')
+  .regex(/[0-9]/, 'At least one number')
+
+const schema = z
+  .object({
+    firmName: z.string().min(1, 'Firm name is required'),
+    adminContact: z.string().min(1, 'Admin contact is required').email('Invalid email'),
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    createInitialProject: z.boolean().optional(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
 
 export type SignupFormModalData = z.infer<typeof schema>
 
@@ -44,12 +58,14 @@ export function SignupFormModal({ open, onOpenChange, onSuccess }: SignupFormMod
     defaultValues: { createInitialProject: true },
   })
   const createInitialProject = watch('createInitialProject')
+  const password = watch('password', '')
 
   const onSubmit = async (data: SignupFormModalData) => {
     try {
       await signup({
         firmName: data.firmName,
         adminContact: data.adminContact,
+        password: data.password,
         createInitialProject: data.createInitialProject ?? false,
       })
       localStorage.setItem('token', 'demo')
@@ -58,13 +74,12 @@ export function SignupFormModal({ open, onOpenChange, onSuccess }: SignupFormMod
       onOpenChange(false)
       onSuccess?.()
       window.location.href = '/dashboard'
-    } catch {
-      localStorage.setItem('token', 'demo')
-      toast.success('Account created successfully')
-      reset()
-      onOpenChange(false)
-      onSuccess?.()
-      window.location.href = '/dashboard'
+    } catch (err: unknown) {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: string }).message)
+          : 'Something went wrong. Please try again.'
+      toast.error(message)
     }
   }
 
@@ -74,7 +89,7 @@ export function SignupFormModal({ open, onOpenChange, onSuccess }: SignupFormMod
         <DialogHeader>
           <DialogTitle>Create account</DialogTitle>
           <DialogDescription>
-            Enter your firm details. You can create your first project after signing up.
+            Enter your firm details and a secure password. You can create your first project after signing up.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -84,7 +99,7 @@ export function SignupFormModal({ open, onOpenChange, onSuccess }: SignupFormMod
               id="signup-firm"
               placeholder="Acme Architecture"
               autoComplete="organization"
-              className={errors.firmName ? 'border-destructive focus-visible:ring-destructive' : ''}
+              className={cn(errors.firmName && 'border-destructive focus-visible:ring-destructive')}
               {...register('firmName')}
             />
             {errors.firmName && (
@@ -100,12 +115,45 @@ export function SignupFormModal({ open, onOpenChange, onSuccess }: SignupFormMod
               type="email"
               placeholder="admin@firm.com"
               autoComplete="email"
-              className={errors.adminContact ? 'border-destructive focus-visible:ring-destructive' : ''}
+              className={cn(errors.adminContact && 'border-destructive focus-visible:ring-destructive')}
               {...register('adminContact')}
             />
             {errors.adminContact && (
               <p className="text-small text-destructive" role="alert">
                 {errors.adminContact.message}
+              </p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="signup-password">Password</Label>
+            <Input
+              id="signup-password"
+              type="password"
+              placeholder="••••••••"
+              autoComplete="new-password"
+              className={cn(errors.password && 'border-destructive focus-visible:ring-destructive')}
+              {...register('password')}
+            />
+            <PasswordStrengthIndicator password={password} className="mt-1" />
+            {errors.password && (
+              <p className="text-small text-destructive" role="alert">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="signup-confirm-password">Confirm password</Label>
+            <Input
+              id="signup-confirm-password"
+              type="password"
+              placeholder="••••••••"
+              autoComplete="new-password"
+              className={cn(errors.confirmPassword && 'border-destructive focus-visible:ring-destructive')}
+              {...register('confirmPassword')}
+            />
+            {errors.confirmPassword && (
+              <p className="text-small text-destructive" role="alert">
+                {errors.confirmPassword.message}
               </p>
             )}
           </div>

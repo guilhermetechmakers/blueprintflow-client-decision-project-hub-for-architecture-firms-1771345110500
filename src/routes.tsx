@@ -26,6 +26,7 @@ import { Settings } from '@/pages/settings'
 import { AdminDashboard } from '@/pages/admin-dashboard'
 import { Help } from '@/pages/help'
 import { PasswordReset } from '@/pages/password-reset'
+import { ResetPasswordConfirm } from '@/pages/reset-password-confirm'
 import { EmailVerification } from '@/pages/email-verification'
 import { Pricing } from '@/pages/pricing'
 import { Privacy } from '@/pages/privacy'
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
       { path: 'signup', element: <Signup /> },
       { path: 'login-/-signup', element: <LoginSignupPage /> },
       { path: 'password-reset', element: <PasswordReset /> },
+      { path: 'reset-password', element: <ResetPasswordConfirm /> },
       { path: 'email-verification', element: <EmailVerification /> },
     ],
   },

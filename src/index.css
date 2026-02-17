@@ -95,6 +95,23 @@
   }
 }
 
+/* Auth layout left panel: subtle animated gradient */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.auth-panel-gradient {
+  background: linear-gradient(
+    135deg,
+    rgb(var(--primary)) 0%,
+    rgb(var(--primary)) 50%,
+    rgb(var(--accent)) 100%
+  );
+  background-size: 200% 200%;
+  animation: gradient-shift 10s ease infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { toast } from 'sonner'
-import { Building2, Mail, MessageCircle } from 'lucide-react'
+import { Building2, Mail, MessageCircle, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { getSsoLoginUrl } from '@/api/auth'
 import { cn } from '@/lib/utils'
 
 export interface SocialLoginButtonsProps {
@@ -9,9 +11,26 @@ export interface SocialLoginButtonsProps {
 }
 
 export function SocialLoginButtons({ onSSOClick, className }: SocialLoginButtonsProps) {
-  const handleSSO = (provider: 'saml' | 'google' | 'microsoft') => {
+  const [loadingProvider, setLoadingProvider] = useState<'google' | 'microsoft' | null>(null)
+
+  const handleSSO = async (provider: 'saml' | 'google' | 'microsoft') => {
     onSSOClick?.(provider)
-    toast.info(`${provider === 'saml' ? 'Enterprise SSO' : provider} sign-in can be configured by your admin.`)
+    if (provider === 'saml') {
+      toast.info('Enterprise SSO can be configured by your admin.')
+      return
+    }
+    setLoadingProvider(provider)
+    try {
+      const { url } = await getSsoLoginUrl(provider)
+      if (url) {
+        window.location.href = url
+        return
+      }
+    } catch {
+      toast.info(`${provider} sign-in can be configured by your admin.`)
+    } finally {
+      setLoadingProvider(null)
+    }
   }
 
   return (
@@ -32,9 +51,14 @@ export function SocialLoginButtons({ onSSOClick, className }: SocialLoginButtons
           variant="secondary"
           className="w-full transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
           onClick={() => handleSSO('google')}
+          disabled={loadingProvider !== null}
           aria-label="Sign in with Google"
         >
-          <Mail className="h-4 w-4 shrink-0" aria-hidden />
+          {loadingProvider === 'google' ? (
+            <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden />
+          ) : (
+            <Mail className="h-4 w-4 shrink-0" aria-hidden />
+          )}
           <span className="truncate">Google</span>
         </Button>
         <Button
@@ -42,9 +66,14 @@ export function SocialLoginButtons({ onSSOClick, className }: SocialLoginButtons
           variant="secondary"
           className="w-full transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
           onClick={() => handleSSO('microsoft')}
+          disabled={loadingProvider !== null}
           aria-label="Sign in with Microsoft"
         >
-          <MessageCircle className="h-4 w-4 shrink-0" aria-hidden />
+          {loadingProvider === 'microsoft' ? (
+            <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden />
+          ) : (
+            <MessageCircle className="h-4 w-4 shrink-0" aria-hidden />
+          )}
           <span className="truncate">Microsoft</span>
         </Button>
       </div>
